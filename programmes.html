@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITIRC</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+          <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+            <img src="Media/ITIRC_Logo.png" alt="Logo ITIRC" class="logo-img" />
+            <span>ITIRC ENSAO</span>
+          </div>
+          <div class="links">
+            <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+            <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+            <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+            <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="Contact.html">Contact</a></div>
+          </div>
+          <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+        </div>
+        <div class="dropdown">
+          <div class="links">
+            <a href="index.html">Accueil</a>
+            <a href="apropos.html">À propos</a>
+            <a href="programmes.html">Programme</a>
+            <a href="Contact.html">Contact</a>
+            <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+          </div>
+        </div>
+      </nav>
+
+  <main>
+    <h1>Cycle d'Ingénieur ITIRC</h1>
+    <p class="intro">
+      Explorez les modules de chaque année et semestre.
+    </p>
+
+    <!-- Bloc 1re année -->
+    <div class="year-block">
+      <div class="year-badge badge1">1ʳᵉ année</div>
+      <div class="double-card">
+        <!-- S1 -->
+        <div class="card">
+          <h2>Semestre 1</h2>
+          <ul>
+            <li>Analyse mathématique avancée</li>
+            <li>Programmation C</li>
+            <li>Algèbre et logique</li>
+            <li>Introduction aux réseaux</li>
+            <li>Techniques d’expression</li>
+          </ul>
+        </div>
+        <!-- S2 -->
+        <div class="card">
+          <h2>Semestre 2</h2>
+          <ul>
+            <li>Structure de données</li>
+            <li>Probabilités & statistiques</li>
+            <li>Circuits logiques</li>
+            <li>Technologies Web</li>
+            <li>Projet tutoré</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloc 2e année -->
+    <div class="year-block">
+      <div class="year-badge badge2">2ᵉ année</div>
+      <div class="double-card">
+        <!-- S3 -->
+        <div class="card">
+          <h2>Semestre 3</h2>
+          <ul>
+            <li>Mathématiques appliquées</li>
+            <li>Architecture des ordinateurs</li>
+            <li>Réseaux informatiques I</li>
+            <li>Programmation orientée objet</li>
+            <li>Électronique numérique</li>
+          </ul>
+        </div>
+        <!-- S4 -->
+        <div class="card">
+          <h2>Semestre 4</h2>
+          <ul>
+            <li>Théorie des signaux</li>
+            <li>Réseaux informatiques II</li>
+            <li>Systèmes d’exploitation</li>
+            <li>Développement Web avancé</li>
+            <li>Transmission de données</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloc 3e année -->
+    <div class="year-block">
+      <div class="year-badge badge3">3ᵉ année</div>
+      <div class="double-card">
+        <!-- S5 -->
+        <div class="card">
+          <h2>Semestre 5</h2>
+          <ul>
+            <li>Réseaux mobiles</li>
+            <li>Sécurité informatique</li>
+            <li>Systèmes temps réel</li>
+            <li>Ingénierie logicielle</li>
+            <li>Protocoles avancés</li>
+          </ul>
+        </div>
+        <!-- S6 -->
+        <div class="card">
+          <h2>Semestre 6</h2>
+          <ul>
+            <li>Internet des objets (IoT)</li>
+            <li>Cloud Computing</li>
+            <li>Intelligence Artificielle</li>
+            <li>Administration réseau</li>
+            <li>Projet de fin d’études</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ITIRC – Tous droits réservés</p>
+  </footer>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ offset: 0 });
+  </script>
+  <script>
+    function hamburg() {
+      const navbar = document.querySelector(".dropdown");
+      navbar.style.transform = "translateY(0px)";
+    }
+
+    function cancel() {
+      const navbar = document.querySelector(".dropdown");
+      navbar.style.transform = "translateY(-500px)";
+    }
+  </script>
+</body>
+</html>

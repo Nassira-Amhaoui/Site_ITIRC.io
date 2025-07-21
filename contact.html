@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITIRC</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+        <img src="Media/ITIRC_Logo.png" alt="Logo ITIRC" class="logo-img" />
+        <span>ITIRC ENSAO</span>
+      </div>
+      <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="Contact.html">Contact</a></div>
+      </div>
+      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+    </div>
+    <div class="dropdown">
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="apropos.html">À propos</a>
+        <a href="programmes.html">Programme</a>
+        <a href="Contact.html">Contact</a>
+        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+      </div>
+    </div>
+  </nav>  
+  <section class="contact-section">
+    <div class="contact-container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="900">
+  
+      <!-- Colonne gauche : informations -->
+      <div class="contact-info-block">
+        <h2>Contactez<span> Nous</span></h2>
+        <p class="description">
+          Pour toute question, suggestion ou collaboration, contactez-nous via le formulaire ou les informations ci‑dessous.
+        </p>
+        <div class="info-items">
+          <div class="info-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>ENSAO – Filière ITIRC, Maroc</span>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>contact@itirc.ma</span>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>+212 6 00 00 00 00</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Colonne droite : formulaire -->
+      <div class="contact-form-block">
+        <form id="contact-form">
+          <div class="form-row">
+            <input type="text" name="name" placeholder="Nom complet" required />
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+          <input type="tel" name="phone" placeholder="Téléphone" />
+          <textarea name="message" placeholder="Votre message..." required></textarea>
+  
+          <!-- Hidden options -->
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="" />
+  
+          <button type="submit">Envoyer</button>
+        </form>
+      </div>
+  
+    </div>
+  </section>
+  
+  <footer>
+    <p>© 2025 ITIRC – Tous droits réservés</p>
+  </footer>
+  
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+AOS.init({ offset: 0 });
+</script>
+<script>
+function hamburg() {
+const navbar = document.querySelector(".dropdown");
+navbar.style.transform = "translateY(0px)";
+}
+
+function cancel() {
+const navbar = document.querySelector(".dropdown");
+navbar.style.transform = "translateY(-500px)";
+}
+</script>
+</body>
+</html>
+  
