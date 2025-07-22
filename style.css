@@ -12,7 +12,7 @@ html { overflow-x: hidden; }
 body {
   width: 100%;
   min-height: 100vh;
-  background: #001f3f url("Media/back3.gif") no-repeat center center fixed;
+  background: #001f3f url("Media/back.png") no-repeat center center fixed;
   background-size: cover;
   color: #ffffff;
 }
