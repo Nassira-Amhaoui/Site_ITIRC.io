@@ -1,73 +1,69 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ITIRC</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Page de Connexion | ITIRC</title>
+
+    <!-- boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <header class="top-menu">
   <nav>
-    <div class="nav-container">
-      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
-        <img src="Media/ITIRC_Logo.png" alt="Logo ITIRC" class="logo-img" />
-        <span>ITIRC ENSAO</span>
-      </div>
-      <div class="links">
-        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
-        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
-        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
-        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="contact.html">Contact</a></div>
-      </div>
-      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
-    </div>
-    <div class="dropdown">
-      <div class="links">
-        <a href="index.html">Accueil</a>
-        <a href="apropos.html">À propos</a>
-        <a href="programmes.html">Programme</a>
-        <a href="contact.html">Contact</a>
-        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
-      </div>
-    </div>
-  </nav>
-        <section>
-            <div class="main-container">
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="#">À propos</a></li>
+      <li><a href="#">Programmes</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Connexion</a></li>
+        </ul>
+      </nav>
+   </header>
+
+    <div class="login-container">
+        <div class="login-form" id="loginForm">
+            
+            <form>
+                <h1>Connexion</h1>
+               <p class="welcome-message">Bonjour, bienvenue dans votre espace personnalisé</p>
+               
+               <span> utilisez votre adresse e-mail académique et votre mot de passe</span>
+            
+
+    
+                <input type="email" placeholder="Email" class="form-field">
+                <input type="password" placeholder="Mot de passe" class="form-field">
                 
-                <div class="content">
-                    <h1 data-aos="fade-left" data-aos-duration="1000" data-aos-delay="800"> <span>Bienvenue chez ITIRC</span></h1>
-                    <div class="typewriter" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="900"><span></span></div>
-                    <p data-aos="flip-up" data-aos-duration="1000" data-aos-delay="1000">Bienvenue sur la plateforme d’Ingénierie des Technologies de l’Information, du Réseau et de la Communication, où se forment les futurs leaders de l’innovation numérique et des systèmes intelligents.</p>
-                    <div class="social-links" data-aos="flip-down" data-aos-duration="1000" data-aos-delay="1200">
-                      <div class="link apropos_btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
-                        <a href="apropos.html">Voir les détailles</a>
-                      </div>   
-                    </div>
 
-                    
+                <select id="userRole" class="form-field">
+
+                  <option value="" disabled selected>Choisir un rôle</option>
+                   <option value="etudiant">Étudiant</option>
+                   <option value="professeur">Professeur</option>
+                   <option value="admin">Administrateur</option>
+                 </select>
+                 <div class="remember-me-container">
+                <label>
+                <input type="checkbox" class="checkbox"> Se souvenir de moi
+                </label>
                 </div>
-            </div>
-        </section>
-        <footer>
-          <p>© 2025 ITIRC – Tous droits réservés</p>
-        </footer>
-        
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script>
-    AOS.init({ offset: 0 });
-  </script>
-  <script>
-    function hamburg() {
-      const navbar = document.querySelector(".dropdown");
-      navbar.style.transform = "translateY(0px)";
-    }
 
-    function cancel() {
-      const navbar = document.querySelector(".dropdown");
-      navbar.style.transform = "translateY(-500px)";
-    }
-  </script>
+                <button id="signInBtn">Connexion</button>
+                <p id="errorMessage" class="error-message"></p>
+                <a href="#">mot de passe oublié?</a>
+            </form>
+       
+    <script src="script.js"></script>
 </body>
+
 </html>
