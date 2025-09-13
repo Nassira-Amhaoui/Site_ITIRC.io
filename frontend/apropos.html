@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITIRC</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<body>
+ 
+  <nav>
+    <div class="nav-container">
+      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+        <img src="Media/Logo-ITIRC.png" alt="Logo ITIRC" class="logo-img" />
+      </div>
+      <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="Témoignage.html">Témoignage</a></div>
+        <div class="link " data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="contact.html">Contact</a></div>
+        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="authentification.html">Login</a></div>
+      </div>
+      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+    </div>
+    <div class="dropdown">
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="apropos.html">À propos</a>
+        <a href="programmes.html">Programme</a>
+        <a href="Témoignage.html">Témoignage</a>
+        <a href="authentification.html">Login</a>
+        <a href="contact.html">Contact</a>
+        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="about-main">
+    
+    <section1 class="about-intro" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="100">
+      <p>
+      Bienvenue chez ITIRC ! Notre filière forme des ingénieurs polyvalents capables de concevoir, déployer et gérer des infrastructures de communication modernes et des systèmes d’information complexes. 
+     </p>
+    </section1>
+    <section1 class="about-content">
+      <div class="about-grid">
+        <div class="about-card" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-bullseye"></i>
+          <h2>Notre mission</h2>
+          <p>
+            Former des ingénieurs experts en IT et réseaux de communication,
+            capables d’innover et de contribuer activement à la transformation numérique
+            dans des secteurs variés, du développement logiciel à la cybersécurité.
+          </p>
+        </div>
+        <div class="about-card" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-lightbulb"></i>
+          <h2>Notre vision</h2>
+          <p>
+            Inspirer une génération d’ingénieurs connectés, créatifs et responsables,
+            prêts à anticiper les défis technologiques et à imaginer des solutions durables
+            pour un monde en constante évolution.
+          </p>
+        </div>
+        <div class="about-card" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-users"></i>
+          <h2>Notre communauté</h2>
+          <p>
+            Au cœur de la filière ITIRC se trouve une communauté dynamique :
+            des enseignants passionnés, des étudiants engagés et des partenaires
+            industriels qui collaborent pour offrir des expériences pratiques,
+            des projets réels et des opportunités de recherche.
+          </p>
+        </div>
+      </div>
+    </section1>
+
+    <section1 class="about-values">
+      <h2>Nos valeurs</h2>
+      <div class="values-grid">
+        <div class="value-card" data-aos="zoom-out-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h3>Innovation</h3>
+          <p>
+            Chaque idée compte. Nous encourageons la curiosité et soutenons
+            les initiatives audacieuses pour construire ensemble l’avenir numérique.
+          </p>
+        </div>
+        <div class="value-card" data-aos="zoom-out-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-seedling"></i>
+          <h3>Créativité</h3>
+          <p>
+            Au-delà des technologies, nous cultivons l’art de transformer un concept
+            en solution concrète et originale.
+          </p>
+        </div>
+        <div class="value-card" data-aos="zoom-out-up" data-aos-duration="1000" data-aos-delay="100">
+          <i class="fas fa-hands-helping"></i>
+          <h3>Collaboration</h3>
+          <p>
+            Nous croyons au pouvoir du travail d’équipe et des échanges,
+            où chaque voix enrichit nos projets et nos ambitions.
+          </p>
+        </div>
+      </div>
+    </section1>
+  </main>
+  <footer>
+    <p>© 2025 ITIRC – ENSAO</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ offset: 0 });
+  </script>
+  <script>
+    function hamburg() {
+      document.querySelector(".dropdown").style.transform = "translateY(0px)";
+    }
+    function cancel() {
+      document.querySelector(".dropdown").style.transform = "translateY(-500px)";
+    }
+  </script>
+</body>
+</html>

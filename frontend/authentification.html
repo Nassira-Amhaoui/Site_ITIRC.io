@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITIRC</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  
+  <!-- Firebase compat pour que firebase soit global -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+<nav>
+    <div class="nav-container">
+      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+        <img src="Media/Logo-ITIRC.png" alt="Logo ITIRC" class="logo-img" />
+      </div>
+      <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="Témoignage.html">Témoignage</a></div>
+        <div class="link " data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="contact.html">Contact</a></div>
+        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="authentification.html">Login</a></div>
+      </div>
+      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+    </div>
+    <div class="dropdown">
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="apropos.html">À propos</a>
+        <a href="programmes.html">Programme</a>
+        <a href="Témoignage.html">Témoignage</a>
+        <a href="authentification.html">Login</a>
+        <a href="contact.html">Contact</a>
+        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container"data-aos="fade-up" data-aos-duration="1000">
+    <div class="left-side">
+      <h1>Bienvenue dans votre <span class="highlight">espace privé</span></h1>
+    </div>
+    
+    <div class="right-side">
+      <div class="form-box">
+        <h2>Connexion</h2>
+        <p>Accédez à votre espace personnel</p>
+        <form id="loginForm">
+          <input type="email" id="email" placeholder="Email académique" required />
+          <div class="password-wrapper">
+            <input type="password" id="regNo" placeholder="Mot de passe" required />
+            <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
+          </div>
+          <select id="role" required>
+            <option value="" disabled selected>Choisissez votre rôle</option>
+            <option value="etudiants">Étudiant</option>
+            <option value="profs">Professeur</option>
+            <option value="admins">Administrateur</option>
+          </select>
+          <div class="form-options">
+            <label><input type="checkbox" id="rememberMe"> Se souvenir de moi</label>
+            <a href="#" id="forgotPassword">Mot de passe oublié ?</a>
+          </div>
+          <p id="errorMessage" class="error-message"></p>
+          <button type="submit">Se connecter</button>
+          <button type="button" id="googleLogin" class="google-btn">
+          <i class="fa-brands fa-google"></i> Se connecter avec Google
+        </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+
+<script>
+  // 🔹 Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCunanBURdN_5MaEKxBNN3DfY8WfQsZZIM",
+    authDomain: "itirc-platforme.firebaseapp.com",
+    projectId: "itirc-platforme"
+  };
+ // 🔹 Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+
+// 🔹 Auth après l'init
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+  const emailField = document.getElementById('email');
+  const passwordField = document.getElementById('regNo');
+  const rememberMe = document.getElementById('rememberMe');
+  const loginForm = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMessage');
+  const togglePassword = document.getElementById('togglePassword');
+  const forgotPasswordLink = document.getElementById('forgotPassword');
+
+  // 🔹 Toggle mot de passe
+  togglePassword.addEventListener('click', () => {
+    const type = passwordField.type === 'password' ? 'text' : 'password';
+    passwordField.type = type;
+    togglePassword.classList.toggle('fa-eye');
+    togglePassword.classList.toggle('fa-eye-slash');
+  });
+
+  // 🔹 Remplissage si "se souvenir de moi"
+  window.addEventListener('load', () => {
+    if (localStorage.getItem('rememberMe') === 'true') {
+      emailField.value = localStorage.getItem('email');
+      passwordField.value = localStorage.getItem('password');
+      rememberMe.checked = true;
+    }
+  });
+
+  // 🔹 Formulaire login
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = emailField.value.trim();
+    const regNo = passwordField.value.trim();
+    const selectedRole = document.getElementById('role').value;
+
+    if (!email || !regNo || !selectedRole) {
+      errorMsg.textContent = "Veuillez remplir tous les champs.";
+      return;
+    }
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, regNo, role: selectedRole })
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        errorMsg.textContent = data.error || 'Erreur inconnue.';
+        return;
+      }
+
+      // 🔹 Stockage pour dashboard
+      sessionStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem('uid', data.uid);
+      localStorage.setItem('role', data.role);
+
+      if (rememberMe.checked) {
+        localStorage.setItem('rememberMe', 'true');
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', regNo);
+      } else {
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+      }
+
+      // Redirection selon rôle
+      switch (data.role) {
+        case 'admins':
+          window.location.href = '/dashboard-admin.html';
+          break;
+        case 'profs':
+          window.location.href = '/dashboard-prof.html';
+          break;
+        case 'etudiants':
+          window.location.href = '/dashboard-etudiant.html';
+          break;
+        default:
+          errorMsg.textContent = 'Rôle non reconnu.';
+      }
+
+    } catch (err) {
+      console.error(err);
+      errorMsg.textContent = 'Impossible de se connecter au serveur.';
+    }
+  });
+
+  // 🔹 Mot de passe oublié
+  forgotPasswordLink.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = emailField.value.trim();
+    if (!email) {
+      alert("Veuillez entrer votre email pour réinitialiser le mot de passe.");
+      return;
+    }
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+      alert("Un e-mail de réinitialisation a été envoyé à " + email);
+    } catch (error) {
+      alert("Erreur : " + error.message);
+    }
+  });
+  
+  // 🔹 Google login
+  const googleLoginBtn = document.getElementById("googleLogin");
+
+  googleLoginBtn.addEventListener("click", async () => {
+    try {
+      const result = await auth.signInWithPopup(provider);
+      const user = result.user;
+
+      // 🔹 Appel backend pour vérifier l'email
+      const res = await fetch('/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("uid", data.uid);
+        localStorage.setItem("role", data.role);
+
+        // Optionnel : stocker nom/email pour sidebar
+        localStorage.setItem("name", user.displayName || "Admin");
+        localStorage.setItem("email", user.email);
+        // Redirection selon rôle
+        let roleName = data.role.slice(0, -1); // supprime le dernier caractère 's'
+        window.location.href = `/dashboard-${roleName}.html`;
+
+      } else {
+        alert(data.message || "Utilisateur non trouvé !");
+      }
+    } catch (err) {
+      console.error("Erreur Google login :", err);
+      alert("Connexion Google échouée !");
+    }
+  });
+</script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init({ offset: 0 });
+</script>
+<script>
+    function hamburg() {
+    const navbar = document.querySelector(".dropdown");
+    navbar.style.transform = "translateY(0px)";
+    }
+
+    function cancel() {
+    const navbar = document.querySelector(".dropdown");
+    navbar.style.transform = "translateY(-500px)";
+    }
+    
+</script>
+</body>
+</html>

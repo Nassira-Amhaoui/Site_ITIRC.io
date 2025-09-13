@@ -1,0 +1,640 @@
+/* Reset global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  color: #1e293b;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Sidebar - fixe à gauche */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 20px rgba(79, 70, 229, 0.3);
+  transition: width 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 40px;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-header {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.sidebar-header img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid #dbeafe;
+  margin-bottom: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 10px rgba(255 255 255 / 0.7);
+}
+
+.sidebar-header h3 {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 4px rgba(255 255 255 / 0.8);
+}
+
+.sidebar-header p {
+  font-size: 13px;
+  color: #c7d2fe;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 3px rgba(255 255 255 / 0.6);
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 15px;
+  color: #c7d2fe;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: inset 0 0 0 0 transparent;
+  transition: all 0.3s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  color: #eef2ff;
+  box-shadow: inset 4em 0 #818cf8;
+  transform: translateX(6px);
+  font-weight: 600;
+}
+
+/* Icônes Font Awesome */
+.nav-icon i {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  color: inherit;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Quand sidebar est réduite, cacher texte menu */
+.sidebar.collapsed nav a span.text {
+  display: none;
+}
+
+/* Toggle Button */
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  right: -25px;
+  background-color: #6366f1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid white;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 1100;
+  box-shadow: 0 0 10px #818cf8aa;
+}
+
+.sidebar.collapsed .toggle-btn {
+  transform: rotate(180deg);
+  background-color: #4f46e5;
+  box-shadow: 0 0 12px #4f46e5cc;
+}
+
+/* Main content - espace à droite du menu */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 40px 50px;
+  min-height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed + .main {
+  margin-left: 80px;
+}
+
+/* Content sections */
+.content-section {
+  display: none;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.content-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Semestre style with circle */
+.semester-block {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+  margin-bottom: 30px;
+  padding: 20px 25px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  user-select: none;
+}
+
+.semester-circle {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 22px;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.5);
+  user-select: none;
+  transition: background 0.3s ease;
+}
+
+.semester-circle:hover {
+  background: linear-gradient(135deg, #4f46e5, #818cf8);
+  cursor: default;
+}
+
+.module-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.module-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.module-icon {
+  font-size: 28px;
+  color: #6366f1;
+  animation: pulse 3s infinite ease-in-out;
+  user-select: none;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.75;
+  }
+}
+
+.upload-section {
+  display: flex;
+  gap: 20px;
+}
+
+.upload-box {
+  flex: 1;
+  background: #f9f9ff;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.1);
+}
+
+.upload-box p {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #4f46e5;
+}
+
+.upload-btn {
+  padding: 8px 16px;
+  background: #4f46e5;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  transition: all 0.3s ease;
+}
+
+.upload-btn:hover:not(.disabled) {
+  background: #4338ca;
+  transform: translateY(-2px);
+}
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc; /* ou garder la couleur et juste mettre plus clair */
+}
+
+.absent {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* Resources section */
+/* Conteneur global */
+#ressources {
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+/* Titre principal */
+#ressources h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #1a73e8;
+}
+
+/* Titre des semestres */
+#ressources h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #0d47a1;
+  border-bottom: 2px solid #0d47a1;
+  padding-bottom: 0.3rem;
+}
+
+/* Cartes pour chaque module */
+#ressources h4 {
+  font-size: 1.2rem;
+  margin: 1rem 0 0.5rem 0;
+  background: linear-gradient(90deg, #42a5f5, #478ed1);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: inline-block;
+}
+
+/* Liste de ressources */
+#ressources ul {
+  list-style: none;
+  padding: 0.5rem 0 1.5rem 1rem;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+/* Chaque ressource */
+#ressources li {
+  background: #f7f9fc;
+  border-left: 4px solid #1a73e8;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect */
+#ressources li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Liens de téléchargement */
+#ressources a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #1a73e8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+#ressources a:hover {
+  background-color: #0d47a1;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  #ressources ul {
+    grid-template-columns: 1fr;
+  }
+
+  #ressources h4 {
+    font-size: 1rem;
+  }
+}
+
+/* =================== Ressources =================== */
+.resource-card {
+  background: #f7f9fc;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover effect */
+.resource-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+/* Titre de chaque type */
+.resource-card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  color: #fff;
+  display: inline-block;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Couleurs selon type */
+.resource-card.cours h4 { background: linear-gradient(90deg, #42a5f5, #478ed1); }
+.resource-card.td h4 { background: linear-gradient(90deg, #66bb6a, #338a3e); }
+.resource-card.tp h4 { background: linear-gradient(90deg, #ffa726, #f57c00); }
+
+/* Liste des ressources */
+.resource-card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+/* Chaque ressource */
+.resource-card li {
+  background: #fff;
+  border-left: 4px solid #1a73e8;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover sur la ressource */
+.resource-card li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Bouton de téléchargement */
+.resource-card a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #1a73e8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.resource-card a:hover {
+  background-color: #0d47a1;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .resource-card ul {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-card h4 {
+    font-size: 1rem;
+  }
+}
+
+/* Profil section */
+.profil {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+#profil h2 {
+  text-align: center;
+  font-weight: bold;
+  color: #0e58f7;
+  margin-bottom: 20px;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #4b5563;
+  margin-bottom: 5px;
+}
+
+.form-group input[type='text'],
+.form-group input[type='email'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+.form-group input[readonly] {
+  background-color: #f1f5f9;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.form-group input[type='file'] {
+  margin-top: 10px;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-actions button:hover {
+  background-color: #2563eb;
+}
+
+.photo-preview {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.photo-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+}
+
+.btn,
+.btn-secondary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+}
+
+.btn:hover,
+.btn-secondary:hover {
+  opacity: 0.9;
+}
+
+.password-form {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.password-form input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.hidden {
+  display: none;
+}
+/* =================== Cercle du module =================== */
+.semester-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #42a5f5, #478ed1);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Hover sur le cercle */
+.semester-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Adapter la taille pour mobile */
+@media (max-width: 768px) {
+  .semester-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+}
+
+/* Ajouter une petite animation au chargement */
+.semester-circle {
+  animation: popIn 0.5s ease-out;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}

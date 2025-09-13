@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Professeur - ITIRC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="c.css" />
+  
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="Media/profile.png" alt="Professeur" />
+      <h3>prof</h3>
+      <p>emailprof@itirc.ma</p>
+    </div>
+    <nav>
+        <a href="#" class="nav-link active" data-section="accueil">
+          <span class="nav-icon"><i class="fas fa-house"></i></span><span class="text">Accueil</span>
+        </a>
+        <a href="#" class="nav-link" data-section="profil">
+          <span class="nav-icon"><i class="fas fa-user"></i></span><span class="text">Mon Profil</span>
+        </a>
+        <a href="#" class="nav-link" data-section="ressources">
+          <span class="nav-icon"><i class="fas fa-folder-open"></i></span><span class="text">Ressources</span>
+        </a>
+       <a href="#" id="logout-btn" class="nav-link">
+        <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span class="text">Déconnexion</span>
+      </a>
+
+          
+      </nav>
+      
+    <div class="toggle-btn" id="toggleSidebar" title="Réduire/Étendre le menu">❮</div>
+  </aside>
+
+  <main class="main">
+    <!-- Accueil -->
+    <section id="accueil" class="content-section active"></section>
+
+      <!-- Profil -->
+  <section id="profil" class="content-section card view">
+    <h2>Mon Profil</h2>
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" id="firstName" />
+      </div>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="lastName" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="emailInput" readonly />
+      </div>
+      <div>
+        <button id="togglePasswordForm" class="btn-secondary">Modifier le mot de passe</button>
+      </div>
+      <div id="passwordForm" class="hidden password-form">
+        <h3>Changer le mot de passe</h3>
+        <input type="password" id="oldPassword" placeholder="Ancien mot de passe" />
+        <input type="password" id="newPassword" placeholder="Nouveau mot de passe" />
+        <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" />
+        <button id="savePasswordBtn" class="btn" style="margin-top:10px;">Enregistrer le mot de passe</button>
+      </div>
+      <div class="form-actions" style="margin-top:15px;">
+        <button id="saveProfileBtn" class="btn">Enregistrer</button>
+      </div>
+    </section>
+
+    <!-- Ressources -->
+    <section id="ressources" class="content-section">
+      <h2>Mes Ressources</h2>
+      <p>Liste des ressources uploadées...</p>
+    </section>
+
+   
+  </main>
+<!-- Firebase App (obligatoire) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+ <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCunanBURdN_5MaEKxBNN3DfY8WfQsZZIM",
+      authDomain: "itirc-platforme.firebaseapp.com",
+      projectId: "itirc-platforme",
+      storageBucket: "itirc-platforme.appspot.com",
+      messagingSenderId: "889482668204",
+      appId: "1:889482668204:web:148553ea7d4d5784ca9709",
+    };
+    
+    // Initialisation Firebase
+    firebase.initializeApp(firebaseConfig);
+    // Initialisation Firestore
+    const db = firebase.firestore();
+
+  </script>
+<script>
+async function getProfData() {
+  const profUid = localStorage.getItem('uid') || 'UID_PROF_TEST';
+  const res = await fetch(`/api/prof/${profUid}`);
+  const prof = await res.json();
+
+  if (prof.error) {
+    console.error(prof.error);
+    return;
+  }
+
+  // Mettre à jour la sidebar
+  document.querySelector('.sidebar-header h3').textContent =
+    `${prof.firstName || ''} ${prof.lastName || ''}`.trim() || "Nom inconnu";
+  document.querySelector('.sidebar-header p').textContent = prof.email || "email inconnu";
+
+  // Mettre à jour la section Profil
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const emailInput = document.getElementById('emailInput');
+
+  if (firstNameInput) firstNameInput.value = prof.firstName || '';
+  if (lastNameInput) lastNameInput.value = prof.lastName || '';
+  if (emailInput) emailInput.value = prof.email || '';
+}
+
+async function fetchProfModules() {
+  const uid = localStorage.getItem('uid') || 'UID_PROF_TEST';
+  const res = await fetch(`/api/prof/${uid}/modules`);
+  const data = await res.json();
+
+  if (!data.modules || !data.modules.length) return [];
+  return data.modules;
+}
+
+function renderAccueil(semestres) {
+  const container = document.getElementById('accueil');
+  container.innerHTML = '';
+
+  if (!semestres.length) {
+    container.innerHTML = '<p>Aucun module trouvé.</p>';
+    return;
+  }
+
+  semestres.forEach(sem => {
+    const block = document.createElement('div');
+    block.classList.add('semester-block');
+
+    const modulesHTML = sem.modules.map(mod => {
+      return `
+        <div class="module-name" data-module-id="${mod.id}">
+          📘 ${mod.name}
+          <div class="upload-section">
+            <div class="upload-box">
+              <p>COURS</p>
+              <button class="upload-btn upload-cours" ${!mod.type.includes('cours') ? 'disabled' : ''}>
+                Uploader
+              </button>
+            </div>
+            <div class="upload-box">
+              <p>TD</p>
+              <button class="upload-btn upload-td" ${!mod.type.includes('td') ? 'disabled' : ''}>
+                Uploader
+              </button>
+            </div>
+            <div class="upload-box">
+              <p>TP</p>
+              <button class="upload-btn upload-tp" ${!mod.type.includes('tp') ? 'disabled' : ''}>
+                Uploader
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    block.innerHTML = `
+      <div class="semester-circle">${sem.title}</div>
+      <div class="module-info">${modulesHTML}</div>
+    `;
+    container.appendChild(block);
+  });
+
+  // === Gestion de l'upload après rendu ===
+  document.querySelectorAll('.upload-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      // Ouvrir le sélecteur de fichier
+      const fichierInput = document.getElementById('fichierInput');
+      fichierInput.click();
+
+      fichierInput.onchange = async () => {
+        const file = fichierInput.files[0];
+        if (!file) return;
+
+        const type = button.classList.contains('upload-cours') ? 'cours'
+                    : button.classList.contains('upload-td') ? 'td'
+                    : 'tp';
+        const moduleId = button.closest('.module-name').dataset.moduleId;
+        const profUid = localStorage.getItem('uid') || 'UID_PROF_TEST';
+
+        const formData = new FormData();
+        formData.append('fichier', file);
+        formData.append('nom', file.name);
+        formData.append('type', type);
+        formData.append('moduleId', moduleId);
+        formData.append('profUid', profUid);
+
+        const res = await fetch('/api/ressources/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        alert(data.success ? "Ressource uploadée !" : "Erreur : " + data.error);
+      };
+    });
+  });
+}
+
+// INIT
+(async function init() {
+  await getProfData();
+  const semestresData = await fetchProfModules();
+  renderAccueil(semestresData);
+})();
+</script>
+
+<script>
+  document.getElementById('toggleSidebar').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  });
+  // Fonction pour enregistrer les modifications du profil
+document.getElementById('saveProfileBtn')?.addEventListener('click', async () => {
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+
+  if (!firstName || !lastName) {
+    return alert("Veuillez remplir le prénom et le nom.");
+  }
+
+  try {
+    // Récupérer l'UID directement
+    const uid = localStorage.getItem('uid');
+    if (!uid) throw new Error("Utilisateur non connecté.");
+
+    // Référence Firestore
+    const profRef = db.collection('users')
+                      .doc('rolesDoc')
+                      .collection('profs')
+                      .doc(uid);
+
+    // Mise à jour des informations
+    await profRef.update({
+      firstName: firstName,
+      lastName: lastName,
+    });
+
+    alert("Profil mis à jour avec succès !");
+
+    // Mettre à jour le sidebar
+    document.querySelector('.sidebar-header h3').textContent = `${firstName} ${lastName}`;
+    document.querySelector('.sidebar-header p').textContent = email;
+
+  } catch (err) {
+    console.error('[ERROR] Mise à jour profil Firestore :', err);
+    alert("Impossible de mettre à jour le profil : " + err.message);
+  }
+});
+
+
+
+  function togglePasswordForm() {
+    document.getElementById('passwordForm').classList.toggle('hidden');
+  }
+
+
+  // --- Toggle mot de passe ---
+  document.getElementById('togglePasswordForm')?.addEventListener('click', () => {
+    document.getElementById('passwordForm').classList.toggle('hidden');
+  });
+document.getElementById('savePasswordBtn')?.addEventListener('click', async () => {
+  const oldPassword = document.getElementById('oldPassword').value.trim();
+  const newPassword = document.getElementById('newPassword').value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+  if (!oldPassword || !newPassword || !confirmPassword)
+    return alert("Veuillez remplir tous les champs du mot de passe.");
+
+  if (newPassword !== confirmPassword)
+    return alert("Le nouveau mot de passe et sa confirmation ne correspondent pas.");
+
+  try {
+    // Récupérer l'UID directement depuis localStorage
+    const uid = localStorage.getItem('uid');
+    if (!uid) throw new Error("Utilisateur non connecté.");
+
+    // Référence Firestore
+    const profRef = db.collection('users')
+                      .doc('rolesDoc')
+                      .collection('profs')
+                      .doc(uid);
+
+    const docSnap = await profRef.get();
+    if (!docSnap.exists) throw new Error("Utilisateur introuvable dans Firestore.");
+
+    const currentData = docSnap.data();
+    if (currentData.regNo !== oldPassword) 
+      return alert("Ancien mot de passe incorrect !");
+
+    // Mise à jour du mot de passe
+    await profRef.update({ regNo: newPassword });
+    alert("Mot de passe mis à jour avec succès.");
+
+    // Déconnexion après changement
+    localStorage.clear();
+    window.location.href = '/authentification.html';
+
+  } catch (err) {
+    console.error('[ERROR] Changement mot de passe Firestore :', err);
+    alert("Impossible de changer le mot de passe : " + err.message);
+  }
+});
+
+
+
+
+  // --- Déconnexion ---
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = '/authentification.html';
+  });
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = link.dataset.section;
+      if (!target) return;
+      e.preventDefault();
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.toggle('active', section.id === target);
+      });
+       if (target === 'ressources') {
+      fetchProfRessources();
+    }
+  });
+});
+   
+  async function fetchProfRessources() {
+  const profUid = localStorage.getItem('uid') || 'UID_PROF_TEST';
+  const res = await fetch(`/api/ressources/${profUid}`);
+  const data = await res.json();
+
+  if (!data.ressources || Object.keys(data.ressources).length === 0) {
+    document.querySelector('#ressources').innerHTML = `
+      <h2>Mes Ressources</h2>
+      <p>Aucune ressource uploadée.</p>
+    `;
+    return;
+  }
+
+  let html = '<h2>Mes Ressources</h2>';
+  for (const semestre in data.ressources) {
+    html += `<h3>Semestre ${semestre}</h3>`;
+    const modules = data.ressources[semestre];
+    for (const moduleName in modules) {
+      html += `<h4>📘 ${moduleName}</h4><ul>`;
+      modules[moduleName].forEach(r => {
+        html += `
+          <li>
+            <strong>${r.nom}</strong> (${r.type.toUpperCase()})
+            - <a href="${r.fichierUrl}" target="_blank">Télécharger</a>
+          </li>
+        `;
+      });
+      html += '</ul>';
+    }
+  }
+
+  document.querySelector('#ressources').innerHTML = html;
+}
+
+</script>
+<input type="file" id="fichierInput" class="hidden" />
+
+</body>
+</html>

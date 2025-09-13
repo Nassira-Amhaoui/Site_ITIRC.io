@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Témoignages des Lauréats</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+        <img src="Media/Logo-ITIRC.png" alt="Logo ITIRC" class="logo-img" />
+      </div>
+      <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"><a href="Témoignage.html">Témoignage</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500"><a href="contact.html">Contact</a></div>
+        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="authentification.html">Login</a></div>
+      </div>
+      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+    </div>
+    <div class="dropdown">
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="apropos.html">À propos</a>
+        <a href="programmes.html">Programme</a>
+        <a href="Témoignage.html">Témoignage</a>
+        <a href="authentification.html">Login</a>
+        <a href="contact.html">Contact</a>
+        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Section Témoignages -->
+  <section class="testimonials-section">
+    <div class="container1">
+      <h1>Partagez Votre Expérience</h1>
+      <p class="intro-text">Découvrez les témoignages inspirants de nos lauréats et partagez le vôtre pour motiver les générations futures.</p>
+      <button class="btn-toggle-form">Partager mon témoignage</button>
+
+      <form class="testimonial-form hidden" id="testimonialForm">
+        <h2>Soumettre un témoignage</h2>
+        <input type="text" id="nom" placeholder="Nom" required>
+        <input type="text" id="prenom" placeholder="Prénom" required>
+        <input type="text" id="promotion" placeholder="Promotion" required>
+        <input type="text" id="poste" placeholder="Poste actuel" required>
+        <input type="text" id="entreprise" placeholder="Entreprise" required>
+        <textarea id="parcours" placeholder="Parcours" required></textarea>
+        <textarea id="conseils" placeholder="Vos conseils" required></textarea>
+        <button type="submit" class="btn-submit">Soumettre</button>
+      </form>
+
+      <div class="testimonials-list" id="testimonialsList">
+        <!-- Témoignages dynamiques affichés ici -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 ITIRC – ENSAO</p>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ offset: 0 });
+
+    function hamburg() {
+      document.querySelector(".dropdown").style.transform = "translateY(0)";
+    }
+    function cancel() {
+      document.querySelector(".dropdown").style.transform = "translateY(-500px)";
+    }
+
+    // Toggle formulaire
+    const btnToggle = document.querySelector(".btn-toggle-form");
+    const form = document.getElementById("testimonialForm");
+    btnToggle.addEventListener("click", () => {
+      form.classList.toggle("hidden");
+      form.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+ 
+  <script>
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    nom: document.getElementById('nom').value,
+    prenom: document.getElementById('prenom').value,
+    promotion: document.getElementById('promotion').value,
+    poste: document.getElementById('poste').value,
+    entreprise: document.getElementById('entreprise').value,
+    parcours: document.getElementById('parcours').value,
+    conseils: document.getElementById('conseils').value
+  };
+
+  try {
+    const res = await fetch('http://localhost:3000/api/temoignages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    console.log(result);
+    if (result.success) {
+      alert('Témoignage ajouté avec succès !');
+      form.reset();
+    } else {
+      alert('Erreur : ' + result.message);
+    }
+  } catch (err) {
+    console.error('Erreur fetch :', err);
+    alert('Erreur serveur');
+  }
+});
+async function loadTestimonials() {
+  const testimonialsList = document.getElementById('testimonialsList');
+  testimonialsList.innerHTML = ''; // Vide la liste avant d'ajouter
+
+  try {
+    const response = await fetch('http://localhost:5000/api/temoignages');
+    const result = await response.json();
+
+    if (!result.success) {
+      testimonialsList.innerHTML = '<p>Impossible de charger les témoignages.</p>';
+      return;
+    }
+
+    if (result.temoignages.length === 0) {
+      testimonialsList.innerHTML = '<p>Aucun témoignage pour le moment.</p>';
+      return;
+    }
+
+    // Boucle sur chaque témoignage et crée un bloc HTML
+   result.temoignages.forEach(t => {
+  const div = document.createElement('div');
+  div.classList.add('testimonial-item');
+
+  // Conversion de la date
+  let date;
+  if (t.date && t.date._seconds) {
+    // Firestore Timestamp (vérifie _seconds)
+    date = new Date(t.date._seconds * 1000);
+  } else if (t.date && t.date.seconds) {
+    // Firestore Timestamp (version standard)
+    date = new Date(t.date.seconds * 1000);
+  } else {
+    // String ou Date normale
+    date = new Date(t.date);
+  }
+
+  const dateString = isNaN(date.getTime()) ? 'Date inconnue' : date.toLocaleDateString();
+
+  div.innerHTML = `
+    <h3>${t.nom} ${t.prenom}</h3>
+    <span>Promotion ${t.promotion || ''}</span>
+    <p><strong>Poste :</strong> ${t.poste || ''} - <strong>Entreprise :</strong> ${t.entreprise || ''}</p>
+    <p><strong>Parcours :</strong> ${t.parcours || ''}</p>
+    <p><strong>Conseils :</strong> ${t.conseils || ''}</p>
+    <small>Posté le : ${dateString}</small>
+  `;
+  testimonialsList.appendChild(div);
+});
+
+
+  } catch (error) {
+    console.error('Erreur chargement témoignages :', error);
+    testimonialsList.innerHTML = '<p>Erreur lors du chargement des témoignages.</p>';
+  }
+}
+
+// Charger les témoignages au démarrage
+loadTestimonials();
+
+
+</script>
+</body>
+</html>

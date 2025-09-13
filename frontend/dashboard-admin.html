@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Dashboard Admin ITIRC</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style_admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Firebase v8 (compatible avec ton admin.js actuel) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCunanBURdN_5MaEKxBNN3DfY8WfQsZZIM",
+      authDomain: "itirc-platforme.firebaseapp.com",
+      projectId: "itirc-platforme",
+      storageBucket: "itirc-platforme.appspot.com",
+      messagingSenderId: "889482668204",
+      appId: "1:889482668204:web:148553ea7d4d5784ca9709",
+    };
+
+    // Initialisation Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore-compat.js"></script>
+<script>
+  const db = firebase.firestore();
+</script>
+
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header"> 
+      <h3 id="sidebarName">Nom Utilisateur</h3>
+      <p id="sidebarEmail">email@exemple.com</p>
+    </div>
+    <nav>
+      <a href="#" class="nav-link active" data-section="accueil">
+        <span class="nav-icon"><i class="fas fa-chart-line"></i></span><span class="text">Accueil</span>
+      </a>
+      <a href="#" class="nav-link" data-section="modules">
+        <span class="nav-icon"><i class="fas fa-book"></i></span>
+        <span class="text">Modules</span>
+      </a>
+
+      <a href="#" class="nav-link" data-section="profil">
+        <span class="nav-icon"><i class="fas fa-user"></i></span><span class="text">Mon Profil</span>
+      </a>
+      <a href="#" class="nav-link" data-section="enseignants">
+        <span class="nav-icon"><i class="fas fa-chalkboard-teacher"></i></span><span class="text">Enseignants</span>
+      </a>
+      <a href="#" class="nav-link" data-section="etudiants">
+        <span class="nav-icon"><i class="fas fa-user-graduate"></i></span><span class="text">Étudiants</span>
+      </a>
+
+      <a href="#" class="nav-link" id="logout-btn">
+        <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span><span class="text">Déconnexion</span>
+      </a>
+      <div class="toggle-btn" id="toggleSidebar" title="Réduire/Étendre le menu">❮</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainApp">
+    <header>
+      <h1>Dashboard Admin</h1>
+    </header>
+
+    <!-- HOME -->
+    <section class="card view" id="accueil" style="display: block;">
+      <h2>Accueil</h2>
+      <div class="two-charts" style="display:flex; gap:20px;">
+        <div class="chart-card" style="flex:1;">
+          <h3>Utilisateurs par rôle</h3>
+          <div style="width:100%; height:100%; margin:auto;">
+            <canvas id="chartUsers"></canvas>
+          </div>
+        </div>
+      </div>
+      <button id="refresh-home" class="btn">Rafraîchir</button>
+    </section>
+
+    <!-- Profil -->
+    <section class="card view" id="profil" style="display:none;">
+      <h2>Mon Profil</h2>
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" id="firstName" />
+      </div>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="lastName" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="emailInput" readonly />
+      </div>
+      <div>
+        <button id="togglePasswordForm" class="btn-secondary">Modifier le mot de passe</button>
+      </div>
+      <div id="passwordForm" class="hidden password-form">
+        <h3>Changer le mot de passe</h3>
+        <input type="password" id="oldPassword" placeholder="Ancien mot de passe" />
+        <input type="password" id="newPassword" placeholder="Nouveau mot de passe" />
+        <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" />
+        <button id="savePasswordBtn" class="btn" style="margin-top:10px;">Enregistrer le mot de passe</button>
+      </div>
+      <div class="form-actions" style="margin-top:15px;">
+        <button id="saveProfileBtn" class="btn">Enregistrer</button>
+      </div>
+    </section>
+<!-- Modules -->
+<section class="card view" id="modules" style="display:none;">
+  <div class="view-header" style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>Modules</h2>
+    <button id="btn-add-module" class="btn">Ajouter un module</button>
+  </div>
+  <div id="modules-msg" class="msg"></div>
+  <table class="data-table" id="modules-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Semestre</th>
+        <th>Ordre</th>
+        <th>Profs</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+
+    <!-- Enseignants -->
+    <section class="card view" id="enseignants" style="display:none;">
+      <div class="view-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Enseignants</h2>
+        <button id="btn-add-teacher" class="btn">Ajouter un professeur</button>
+      </div>
+      <div id="teachers-msg" class="msg"></div>
+      <table class="data-table" id="teachers-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Numéro </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Étudiants -->
+    <section class="card view" id="etudiants" style="display:none;">
+      <div class="view-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Étudiants</h2>
+        <button id="btn-add-student" class="btn">Ajouter un étudiant</button>
+      </div>
+      <div class="tabs" id="student-tabs" style="margin-bottom:10px;">
+        <button class="tab active" data-sem="S1">S1</button>
+        <button class="tab" data-sem="S2">S2</button>
+        <button class="tab" data-sem="S3">S3</button>
+        <button class="tab" data-sem="S4">S4</button>
+        <button class="tab" data-sem="S5">S5</button>
+        <button class="tab" data-sem="S6">S6</button>
+      </div>
+      <div id="students-msg" class="msg"></div>
+      <table class="data-table" id="students-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>N° d'inscription</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+      <div class="modal-content" style="background:white; padding:20px; border-radius:8px; min-width:300px; max-width:500px;">
+        <h3 id="modal-title">Formulaire</h3>
+        <div class="form-stack" style="display:flex; flex-direction:column; gap:10px;">
+          <input id="m-firstname" placeholder="Prénom" />
+          <input id="m-lastname" placeholder="Nom" />
+          <input id="m-email" placeholder="Email" />
+          <input id="m-regno" placeholder="N° d'inscription" />
+          <select id="m-role" style="padding:6px;">
+            <option value="profs">Professeur</option>
+            <option value="etudiants">Étudiant</option>
+          </select>
+
+          <div id="m-semesters-container" style="display:none; margin-top:10px;">
+            <label>Semestres et modules :</label>
+            <div id="m-semesters-list" style="display:flex; flex-direction:column; gap:6px; margin-top:6px;"></div>
+            <button id="m-add-sem" class="btn small" style="width:fit-content; margin-top:6px;">Ajouter semestre</button>
+         
+          </div>
+
+          <div class="modal-actions" style="display:flex; gap:10px; margin-top:20px;">
+            <button id="m-save" class="btn" style="flex-grow:1;">Enregistrer</button>
+            <button id="m-cancel" class="btn ghost" style="flex-grow:1;">Annuler</button>
+          </div>
+          <div id="m-msg" class="msg" style="color:red; margin-top:10px;"></div>
+        </div>
+      </div>
+    </div>
+<!-- Modal Modules -->
+<!-- Modal Module -->
+<div id="modules-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3 id="modules-modal-title"></h3>
+    <div id="m-modules-msg" class="msg"></div>
+    <input type="text" id="m-module-name" placeholder="Nom du module">
+    <input type="number" id="m-module-order" placeholder="Ordre">
+    <select id="m-module-semester">
+      <option value="S1">S1</option>
+      <option value="S2">S2</option>
+      <option value="S3">S3</option>
+    </select>
+    <div id="m-module-profs-list"></div>
+    <button type="button" id="m-add-prof">Ajouter Professeur</button>
+  <div style="margin-top:10px; display:flex; justify-content:space-between;">
+    <button id="m-save-module">Enregistrer</button>
+    <button id="m-cancel-module">Annuler</button>
+  </div>
+
+
+  </div>
+</div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="admin.js" defer></script>
+  <script src="profil.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITIRC</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+        <img src="Media/Logo-ITIRC.png" alt="Logo ITIRC" class="logo-img" />
+      </div>
+      <div class="links">
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">Accueil</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="apropos.html">À propos</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="programmes.html">Programme</a></div>
+        <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="Témoignage.html">Témoignage</a></div>
+        <div class="link " data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="contact.html">Contact</a></div>
+        <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="authentification.html">Login</a></div>
+      </div>
+      <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+    </div>
+    <div class="dropdown">
+      <div class="links">
+        <a href="index.html">Accueil</a>
+        <a href="apropos.html">À propos</a>
+        <a href="programmes.html">Programme</a>
+        <a href="Témoignage.html">Témoignage</a>
+        <a href="authentification.html">Login</a>
+        <a href="contact.html">Contact</a>
+        <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+      </div>
+    </div>
+  </nav>
+
+<main>
+  <h1>Cycle d'Ingénieur ITIRC</h1>
+  <p class="intro">
+    Explorez les modules de chaque année et semestre.
+  </p>
+
+  <div class="year-container">
+    <!-- Ligne du bas : 1ʳᵉ et 2ᵉ année côte à côte -->
+    <div class="year-row bottom" >
+      <div class="year-block">
+        <div class="year-badge badge1" data-aos="fade-zoom-in">1ʳᵉ année</div>
+        <div class="double-card">
+          <div class="card" data-aos="zoom-out-up">
+            <h2>Semestre 1</h2>
+            <ul>
+              <li>Electronique Analogique</li>
+              <li>Electronique Numérique </li>
+              <li>Donées et Web</li>
+              <li>Traitement du Signal</li>
+              <li>Management de la transfrormation digitale</li>
+              <li>Régulation et éthique du numérique</li>
+              <li>Analyse des Données -Probabilité et Statistique</li>
+              <li>Français-Anglais</li>
+            </ul>
+          </div>
+          <div class="card" data-aos="zoom-out-up">
+            <h2>Semestre 2</h2>
+            <ul>
+              <li>Architecture des Ordinateurs et
+              Systèmes d’Exploitation
+              </li>
+              <li>Dispositifs et Supports
+                de communication
+                </li>
+              <li>Analyse Numérique et Recherche
+                Opérationnelle </li>
+              <li>Reseaux et Protocles</li>
+              <li>Conception UML et Java</li>
+              <li>Culture and Art Skills </li>
+              <li>Espagnol-Français</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="year-block">
+        <div class="year-badge badge2" data-aos="zoom-out-up">2ᵉ année</div>
+        <div class="double-card">
+          <div class="card" data-aos="zoom-out-up">
+            <h2>Semestre 3</h2>
+            <ul>
+              <li>Transmission Numérique</li>
+              <li>Coudage Source et Canal</li>
+              <li>Python et Base de données avancées</li>
+              <li>Management et Marketing</li>
+              <li>Réseaux Hauts Débits</li>
+              <li>Langue étrangères
+                (Français-Espagnol)
+              </li>
+              <li>Compétences en IA 
+                (IA Skills)
+              </li>
+            </ul>
+          </div>
+          <div class="card" data-aos="zoom-out-up">
+            <h2>Semestre 4</h2>
+            <ul>
+              <li>communication Numériques</li>
+              <li>Technologie Web et Développement web</li>
+              <li>Systèmes de communication</li>
+              <li>Ingénierie des Réseaux Mobiles</li>
+              <li>Antennes et Hyper-fréquences et Circuit
+                Micro ondes
+              </li>
+              <li>Langue étrangères
+                (Espagnol-Anglais)
+              </li>
+              <li>Gestion de projets et entreprenariat</li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+     <div class="year-row top">
+      <div class="year-block">
+        <div class="year-badge badge3" data-aos="zoom-out-up">3ᵉ année</div>
+        <div class="double-card" data-aos="zoom-out-up">
+          <div class="card">
+            <h2>Semestre 5</h2>
+            <ul>
+              <li>Internet des Objets</li>
+              <li>Crypto et Sécurité Informatique</li>
+              <li>Cloud Computing et Virtualisation</li>
+              <li>Systèmes Décisionnels et Big DATA</li>
+              <li>Projets Tutorat et Pratique</li>
+              <li>Langue étrangères (Espagnol-Anglais)</li>
+              <li>EMPLOYMENT SKILLS (Compétences professionnelles)</li>
+            </ul>
+          </div>
+          <div class="card" data-aos="fade-zoom-in">
+            <h2>Semestre 6</h2>
+            <ul>
+              <li> Projet de Fin d'Etude</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <footer>
+    <p>© 2025 ITIRC – ENSAO</p>
+  </footer>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ offset: 0 });
+  </script>
+  <script>
+    function hamburg() {
+      const navbar = document.querySelector(".dropdown");
+      navbar.style.transform = "translateY(0px)";
+    }
+
+    function cancel() {
+      const navbar = document.querySelector(".dropdown");
+      navbar.style.transform = "translateY(-500px)";
+    }
+  </script>
+</body>
+</html>
